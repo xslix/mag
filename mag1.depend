@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1521392524 source:e:\prog\mag1\main.cpp
+	<iostream>
+	<cstdio>
+	<vector>
+	<windows.h>
+	<cstdio>
+	<fstream>
+	<cmath>
+

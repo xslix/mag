@@ -12,7 +12,7 @@
 #include <unordered_map>
 
 #define MatrixSize 256
-#define RodSize 4
+#define RodSize 2
 
 
 using namespace std;
@@ -63,11 +63,6 @@ int main()
 
     ///==========================================
     /// Алгоритм
-        if (RodSize > 4)
-    {
-        cout << "Windows size must be <= 4" << endl;
-        return 0;
-    }
 
     string tmp;
 
@@ -92,13 +87,13 @@ int main()
     ///=========================================
     /// Конец алгоритма
     //cout << "*" << endl;
-    mp.clear();
-    //cout << "%" << endl;
+        //cout << "%" << endl;
     result.cur_time = clock() - result.cur_time;
     result.avg_time += result.cur_time;
     result.min_time = min(result.min_time, result.cur_time);
     result.max_time = max(result.max_time, result.cur_time);
     fin.close();
+    mp.clear();
 
     } while (FindNextFile(hFind, &data));
     FindClose(hFind);

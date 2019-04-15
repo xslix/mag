@@ -58,9 +58,9 @@ int main()
 
     ///==========================================
     /// Алгоритм
-    vector < vector <int> > block;
-    vector < int > amount;
-    vector <int> tmp;
+    vector<vector<int> > block;
+    vector<int> amount;
+    vector<int> tmp;
     int t;
     for (int i=0; i<MatrixSize; ++i)
         for (int j=0; j<MatrixSize; ++j)

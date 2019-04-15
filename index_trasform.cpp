@@ -10,7 +10,7 @@
 #include <list>
 
 #define MatrixSize 256
-#define RodSize 4
+#define RodSize 2
 
 
 using namespace std;

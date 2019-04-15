@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <sstream>
 #define MatrixSize 256
-#define RodSize 20
+#define RodSize 4
 
 
 using namespace std;
@@ -129,13 +129,13 @@ int main()
     ///entropy
     fout << window.size() << "\t";
     double entr = 0;
-    for (auto win : window)
-    {
-     //fout << win.first << "\t" << win.second << "\n";
-     entr-= 1.0 * win.second / (double)MatrixSize / (double)MatrixSize *
-            log(1.0 * win.second / (double)MatrixSize /(double)MatrixSize) / max(1.0,log(RodSize * RodSize * RodSize * RodSize));
-    }
-    fout << entr << endl;
+    //for (auto win : window)
+
+    // //fout << win.first << "\t" << win.second << "\n";
+    // entr-= 1.0 * win.second / (double)MatrixSize / (double)MatrixSize *
+    //        log(1.0 * win.second / (double)MatrixSize /(double)MatrixSize) / max(1.0,log(RodSize * RodSize * RodSize * RodSize));
+    //}
+    //fout << entr << endl;
 
     window.clear();
 

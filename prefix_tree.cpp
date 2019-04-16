@@ -10,7 +10,7 @@
 #include <list>
 #include <random>
 #define MatrixSize 256
-#define RodSize 2
+#define RodSize 20
 #define RN 200
 
 

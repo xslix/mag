@@ -26,7 +26,15 @@ struct t_result
     int files_count;
 } result;
 
-
+struct hash_pair {
+    template <class T1, class T2>
+    size_t operator()(const pair<T1, T2>& p) const
+    {
+        auto hash1 = hash<T1>{}(p.first);
+        auto hash2 = hash<T2>{}(p.second);
+        return hash1 ^ hash2;
+    }
+};
 
 int a[256][256];
 int main()
@@ -59,26 +67,32 @@ int main()
 
            }
     result.cur_time = clock();
-    unordered_map<string, int> mp;
+    unordered_map<pair<int,int>, int, hash_pair> mp;
 
     ///==========================================
     /// Алгоритм
 
-    string tmp;
+    pair<int,int> tmp;
 
-    tmp.resize(RodSize*RodSize);
     for (int i=0; i<MatrixSize; ++i)
         for (int j=0; j<MatrixSize; ++j)
         {
-            int index = 0;
+            tmp.first = 0;
+            tmp.second = 0;
             for (int ii=0; ii<RodSize; ++ii)
                 for (int jj=0; jj<RodSize; ++jj)
                 {
+                    if (a[(i+ii)%MatrixSize][(j+jj)%MatrixSize] == 0)
+                        ++tmp.first;
+                    if (a[(i+ii)%MatrixSize][(j+jj)%MatrixSize] == 1)
+                        ++tmp.second;
 
-                    tmp[index]= '0' + a[(i+ii)%MatrixSize][(j+jj)%MatrixSize];
-                    ++index;
                 }
             // cout << "+" << tmp << endl;
+         //   if (mp.find(tmp) != mp.end())
+          //      mp[tmp]++;
+         //   else
+         //       mp[tmp] = 1;
              mp[tmp]++;
             //cout << "-" << endl;
         }

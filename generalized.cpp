@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <sstream>
 #define MatrixSize 256
-#define RodSize 4
+#define RodSize 20
 
 
 using namespace std;
@@ -26,24 +26,36 @@ struct t_result
 
 } result;
 
-int a[257][257];
-int o[257][257];
-int z[257][257];
-unordered_map <string, int> window;
+struct hash_pair {
+    template <class T1, class T2>
+    size_t operator()(const pair<T1, T2>& p) const
+    {
+        auto hash1 = hash<T1>{}(p.first);
+        auto hash2 = hash<T2>{}(p.second);
+        return hash1 ^ hash2;
+    }
+};
 
-pair <int, int> getSum (int x1, int y1, int x2, int y2)
+int a[MatrixSize + 1][MatrixSize + 1];
+int o[MatrixSize + 1][MatrixSize + 1];
+int z[MatrixSize + 1][MatrixSize + 1];
+//unordered_map <string, int> window;
+unordered_map<pair<int, int>, int, hash_pair> window;
+
+
+int getSum (int x1, int y1, int x2, int y2, int (&mas)[MatrixSize + 1][MatrixSize + 1])
 {
-    return make_pair(z[x2][y2]+z[x1-1][y1-1]-z[x1-1][y2]-z[x2][y1-1],
-                     o[x2][y2]+o[x1-1][y1-1]-o[x1-1][y2]-o[x2][y1-1]);
+    return mas[x2][y2]+mas[x1-1][y1-1]-mas[x1-1][y2]-mas[x2][y1-1];
 }
 
-template <class T>
-std::string to_string(T t)
-{
-    std::ostringstream oss;
-    oss << t;
-    return oss.str();
-}
+//template <class T>
+//std::string to_string(T t)
+//{
+//    std::ostringstream oss;
+//    oss << t;
+//    return oss.str();
+//}
+
 
 int main()
 {
@@ -88,32 +100,31 @@ int main()
     for (int i = 1; i <= MatrixSize; ++i)
         for (int j = 1; j <= MatrixSize; ++j)
         {
-            auto p = make_pair(0, 0);
-            p = getSum(i, j, min(MatrixSize, i + RodSize - 1), min(MatrixSize, j + RodSize - 1));
+            pair<int, int> p = make_pair(0, 0);
+            p.first = getSum(i, j, min(MatrixSize, i + RodSize - 1), min(MatrixSize, j + RodSize - 1), z);
+            p.second = getSum(i, j, min(MatrixSize, i + RodSize - 1), min(MatrixSize, j + RodSize - 1), o);
             if (i + RodSize - 1 > MatrixSize)
              {
-                auto add = getSum( 1, j, (i + RodSize - 1) % MatrixSize, min(MatrixSize, j + RodSize - 1));
-                p.first += add.first;
-                p.second += add.second;
+                p.first += getSum( 1, j, (i + RodSize - 1) % MatrixSize, min(MatrixSize, j + RodSize - 1), z);
+                p.second += getSum( 1, j, (i + RodSize - 1) % MatrixSize, min(MatrixSize, j + RodSize - 1), o);
              }
             if (j + RodSize - 1 > MatrixSize)
             {
-                auto add = getSum( i, 1, min(MatrixSize, i + RodSize - 1), (j + RodSize - 1) % MatrixSize);
-                p.first += add.first;
-                p.second += add.second;
+                p.first += getSum( i, 1, min(MatrixSize, i + RodSize - 1), (j + RodSize - 1) % MatrixSize, z);
+                p.second += getSum( i, 1, min(MatrixSize, i + RodSize - 1), (j + RodSize - 1) % MatrixSize, o);
             }
             if (i + RodSize - 1 > MatrixSize && j + RodSize - 1 > MatrixSize)
             {
-                auto add = getSum( 1, 1, (i + RodSize - 1) % MatrixSize, (j + RodSize - 1) % MatrixSize );
-                p.first += add.first;
-                p.second += add.second;
+                p.first += getSum( 1, 1, (i + RodSize - 1) % MatrixSize, (j + RodSize - 1) % MatrixSize, z);
+                p.second += getSum( 1, 1, (i + RodSize - 1) % MatrixSize, (j + RodSize - 1) % MatrixSize, o);
             }
-            string res = to_string<int>(p.first) + "_" + to_string<int>(p.second);
+            //string res = to_string<int>(p.first) + "_" + to_string<int>(p.second);
+
            // cout << res;
-            if (window.find(res) != window.end())
-                window[res]++;
-            else
-                window[res] = 1;
+           // if (window.find(p) != window.end())
+                window[p]++;
+            //else
+             //   window[p] = 1;
         }
 
     ///=========================================
@@ -128,7 +139,7 @@ int main()
 
     ///entropy
     fout << window.size() << "\t";
-    double entr = 0;
+    //double entr = 0;
     //for (auto win : window)
 
     // //fout << win.first << "\t" << win.second << "\n";
